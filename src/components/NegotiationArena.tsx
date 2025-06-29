@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Building, Zap, TrendingUp, Shield, Clock, CheckCircle, Sword, Trophy, IndianRupee, Percent, Calendar, Users, Target } from 'lucide-react';
+import { TrendingUp, Sword, IndianRupee, Users, Target } from 'lucide-react';
 import { LoanResult } from '../types';
 
 interface NegotiationArenaProps {
   fileName: string;
   onComplete: (result: LoanResult) => void;
-  backendData?: any;
+  backendData?: unknown;
 }
 
 interface Agent {
@@ -23,14 +23,11 @@ const NegotiationArena: React.FC<NegotiationArenaProps> = ({ fileName, onComplet
   const [showCursor, setShowCursor] = useState(true);
   const [progress, setProgress] = useState(0);
   const [currentStage, setCurrentStage] = useState('Initializing');
-  const [isComplete, setIsComplete] = useState(false);
-  const [realData, setRealData] = useState<LoanResult | null>(null);
   const [arenaLines, setArenaLines] = useState<string[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [currentRound, setCurrentRound] = useState(0);
   const [totalRounds, setTotalRounds] = useState(0);
   const [bestOffer, setBestOffer] = useState(0);
-  const [bestAgent, setBestAgent] = useState<string>('');
   const terminalRef = useRef<HTMLDivElement>(null);
 
   // Blinking cursor effect
@@ -57,19 +54,24 @@ const NegotiationArena: React.FC<NegotiationArenaProps> = ({ fileName, onComplet
     // Use real data from backend if available, otherwise use realistic fallback
     let realResult: LoanResult;
     
-    if (backendData && backendData.originalAmount) {
-      // Use real data from backend
+    if (
+      backendData &&
+      typeof backendData === 'object' &&
+      backendData !== null &&
+      'originalAmount' in backendData
+    ) {
+      const data = backendData as LoanResult;
       realResult = {
-        originalAmount: backendData.originalAmount,
-        newAmount: backendData.newAmount || Math.round(backendData.originalAmount * 0.78),
-        savings: backendData.savings || Math.round(backendData.originalAmount * 0.22),
-        savingsPercentage: backendData.savingsPercentage || 22.0,
-        interestRate: backendData.interestRate || '12.5%',
-        tenure: backendData.tenure || '36 months',
-        provider: backendData.provider || 'AI Negotiated Lender',
-        product: backendData.product || 'Business Loan',
-        processedAt: backendData.processedAt || new Date().toISOString(),
-        fileName: backendData.fileName || fileName
+        originalAmount: data.originalAmount,
+        newAmount: data.newAmount || Math.round(data.originalAmount * 0.78),
+        savings: data.savings || Math.round(data.originalAmount * 0.22),
+        savingsPercentage: data.savingsPercentage || 22.0,
+        interestRate: data.interestRate || '12.5%',
+        tenure: data.tenure || '36 months',
+        provider: data.provider || 'AI Negotiated Lender',
+        product: data.product || 'Business Loan',
+        processedAt: data.processedAt || new Date().toISOString(),
+        fileName: data.fileName || fileName
       };
     } else {
       // Realistic fallback data for Indian loan market
@@ -91,8 +93,6 @@ const NegotiationArena: React.FC<NegotiationArenaProps> = ({ fileName, onComplet
         fileName
       };
     }
-
-    setRealData(realResult);
 
     // Initialize 12 agents with different characteristics
     const initialAgents: Agent[] = [
@@ -143,7 +143,7 @@ const NegotiationArena: React.FC<NegotiationArenaProps> = ({ fileName, onComplet
   };
 
   const runNegotiationSimulation = async (realResult: LoanResult, initialAgents: Agent[]) => {
-    let currentAgents = [...initialAgents];
+    const currentAgents = [...initialAgents];
     let round = 1;
     let totalOffers = 0;
     const targetRounds = 55; // 55 rounds to get 50+ offers
@@ -188,7 +188,6 @@ const NegotiationArena: React.FC<NegotiationArenaProps> = ({ fileName, onComplet
         // Update global best
         if (finalOffer < bestOffer) {
           setBestOffer(finalOffer);
-          setBestAgent(agent.name);
         }
 
         const savings = realResult.originalAmount - finalOffer;
@@ -244,7 +243,6 @@ const NegotiationArena: React.FC<NegotiationArenaProps> = ({ fileName, onComplet
     setCurrentLine(prev => prev + finalLines.length);
     setProgress(100);
     setCurrentStage('Victory Declared');
-    setIsComplete(true);
 
     // Complete after final reveal
     setTimeout(() => {

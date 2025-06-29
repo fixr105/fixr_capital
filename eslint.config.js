@@ -23,6 +23,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      '@typescript-eslint/no-unused-expressions': 'off', // TEMP: Disabled due to plugin error, re-enable after fixing
     },
   }
 );

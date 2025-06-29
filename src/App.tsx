@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Upload, TrendingDown, Bot, Cpu, ArrowRight, CheckCircle, Eye, Users, Target, Building2, Home, Car, CreditCard, Briefcase, Factory, Truck, Smartphone, FileText, X, Clock } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Upload, TrendingDown, Bot, Cpu, CheckCircle, Eye, Users, Building2, Home, Car, CreditCard, Briefcase, Factory, Truck, Smartphone, FileText, X, Clock } from 'lucide-react';
+import { motion } from 'framer-motion';
 import NegotiationArena from './components/NegotiationArena';
 import NegotiationResults from './components/NegotiationResults';
 import { LoanResult, UserDetails } from './types';
@@ -13,7 +13,7 @@ function App() {
   const [isMouseMoving, setIsMouseMoving] = useState(false);
   const [currentStage, setCurrentStage] = useState<'main' | 'negotiation' | 'results'>('main');
   const [negotiationResult, setNegotiationResult] = useState<LoanResult | null>(null);
-  const [backendData, setBackendData] = useState<any>(null);
+  const [backendData, setBackendData] = useState<unknown>(null);
   const [isUploading, setIsUploading] = useState(false);
   
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
@@ -64,9 +64,7 @@ function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY;
       const windowHeight = window.innerHeight;
-      
       sectionsRef.current.forEach((section, index) => {
         if (section) {
           const rect = section.getBoundingClientRect();

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle, TrendingDown, IndianRupee, Percent, Calendar, Building, ArrowRight, User, Mail, Phone, Send } from 'lucide-react';
+import { IndianRupee, Percent, Building, ArrowRight, Send } from 'lucide-react';
 import { LoanResult, UserDetails } from '../types';
 
 interface NegotiationResultsProps {

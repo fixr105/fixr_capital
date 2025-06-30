@@ -272,8 +272,7 @@ function App() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <img src="/Seven.png" alt="Seven Capital" className="h-8 w-auto" />
-            <span className="ml-3 text-xl font-bold text-white">Seven Capital</span>
+            <img src="/sevven.png" alt="Seven Capital Logo" className="h-10 w-auto" />
           </div>
           <div className="hidden md:flex space-x-8">
             {sections.map((section, index) => (
@@ -659,6 +658,42 @@ function App() {
             ))}
               </div>
             </div>
+      </section>
+
+      {/* Large Upload Section at the End */}
+      <section className="py-20 bg-black flex flex-col items-center justify-center border-t border-gray-800">
+        <div className="max-w-4xl w-full mx-auto mb-8">
+          <div
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            className={`border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer ${
+              dragActive 
+                ? 'border-sky-400 bg-sky-400/10 scale-105' 
+                : 'border-gray-600 hover:border-sky-400 hover:bg-gray-800/20'
+            }`}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload className="w-20 h-20 text-sky-400 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-white mb-4">
+              {dragActive ? 'Drop your loan offer here' : 'Upload Your Loan Offer'}
+            </h2>
+            <p className="text-xl text-gray-300 mb-4">
+              Drag and drop your PDF, DOC, or DOCX file here
+            </p>
+            <p className="text-gray-400 text-lg">
+              Supports files up to 10MB • Get better terms in minutes
+            </p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+          </div>
+        </div>
       </section>
     </div>
   );
